@@ -104,7 +104,7 @@ public class ValgrindPublisher extends Recorder
 			return false;
 		}
 		
-		EnvVars env = build.getEnvironment(null);
+		EnvVars env = build.getEnvironment();
 
 		ValgrindLogger.log(listener, "Analysing valgrind results");		
 
