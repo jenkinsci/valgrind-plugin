@@ -2,7 +2,6 @@ package org.jenkinsci.plugins.valgrind.parser;
 
 import hudson.FilePath;
 import hudson.Util;
-import hudson.model.BuildListener;
 import hudson.remoting.VirtualChannel;
 
 import java.io.File;
@@ -17,32 +16,30 @@ import org.jenkinsci.plugins.valgrind.util.ValgrindLogger;
 public class ValgrindParserResult implements FilePath.FileCallable<ValgrindReport>
 {
 	private static final long serialVersionUID = -5475538646374717099L;
-	private final BuildListener listener;
 	private String pattern;
 	
-	public ValgrindParserResult( final BuildListener listener, String pattern )
+	public ValgrindParserResult( String pattern )
 	{
-		this.listener = listener;
 		this.pattern = pattern;
 	}
 
 	public ValgrindReport invoke(File basedir, VirtualChannel channel) throws IOException, InterruptedException
 	{
-		ValgrindLogger.log(listener, "looking for valgrind files in '" + basedir.getAbsolutePath() + "' with pattern '" + pattern + "'");
+		ValgrindLogger.logFine("looking for valgrind files in '" + basedir.getAbsolutePath() + "' with pattern '" + pattern + "'");
 		
 		ValgrindReport valgrindReport = new ValgrindReport();
 		
 		for ( String fileName : findValgrindsReports( basedir ) )
 		{
-			ValgrindLogger.log(listener, "parsing " + fileName + "...");
+			ValgrindLogger.logFine("parsing " + fileName + "...");
 			try
 			{
-				ValgrindReport report = new ValgrindSaxParser(listener).parse( new File(basedir, fileName) );				
+				ValgrindReport report = new ValgrindSaxParser().parse( new File(basedir, fileName) );
 				valgrindReport.integrate( report );
 			} 
 			catch (Exception e)
 			{
-				ValgrindLogger.log(listener, "failed to parse " + fileName + ": " + e.getMessage());
+				ValgrindLogger.logFine("failed to parse " + fileName + ": " + e.getMessage());
 			}
 		}
 

@@ -3,7 +3,6 @@ package org.jenkinsci.plugins.valgrind.parser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import hudson.model.BuildListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.easymock.EasyMock;
 import org.jenkinsci.plugins.valgrind.model.ValgrindAuxiliary;
 import org.jenkinsci.plugins.valgrind.model.ValgrindError;
 import org.jenkinsci.plugins.valgrind.model.ValgrindErrorKind;
@@ -25,14 +23,12 @@ import org.xml.sax.SAXException;
 
 public class ValgrindSaxParserTest
 {
-	private BuildListener listenerMock;
 	private ValgrindSaxParser parser;
 	
 	@Before
 	public void setup()
 	{
-		listenerMock = EasyMock.createMock(BuildListener.class);
-		parser = new ValgrindSaxParser(listenerMock);
+		parser = new ValgrindSaxParser();
 	}
 	
 	@Test

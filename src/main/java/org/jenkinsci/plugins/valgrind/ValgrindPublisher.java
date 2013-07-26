@@ -106,13 +106,12 @@ public class ValgrindPublisher extends Recorder
 		
 		EnvVars env = build.getEnvironment();
 
-		ValgrindLogger.log(listener, "Analysing valgrind results");		
+		ValgrindLogger.log(listener, "Analysing valgrind results; configure Jenkins system log (ValgrindLogger) for details");
 
-		ValgrindParserResult parser = new ValgrindParserResult(listener, env.expand(valgrindPublisherConfig.getPattern()));
-		ValgrindReport valgrindReport;
+		ValgrindParserResult parser = new ValgrindParserResult(env.expand(valgrindPublisherConfig.getPattern()));
 
-		valgrindReport = build.getWorkspace().act(parser);		
-		ValgrindResult valgrindResult = new ValgrindResult(build, valgrindReport);		
+		ValgrindResult valgrindResult = new ValgrindResult(build, parser);
+		ValgrindReport valgrindReport = valgrindResult.getReport();
 		
 		new ValgrindEvaluator(valgrindPublisherConfig, listener).evaluate(valgrindReport, build, env); 
 		
