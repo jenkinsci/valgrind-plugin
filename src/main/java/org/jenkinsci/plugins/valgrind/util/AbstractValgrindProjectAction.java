@@ -6,7 +6,6 @@ import org.jenkinsci.plugins.valgrind.ValgrindBuildAction;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Actionable;
@@ -40,7 +39,7 @@ public abstract class AbstractValgrindProjectAction extends Actionable implement
 
     protected abstract Integer getLastResultBuild();
 
-	public void doGraph(StaplerRequest req, StaplerResponse rsp) throws IOException
+	public void doGraph(StaplerRequest req, StaplerResponse rsp) throws IOException, InterruptedException
 	{
 		AbstractBuild<?, ?> lastBuild = getLastFinishedBuild();
 		ValgrindBuildAction valgrindBuildAction = lastBuild.getAction(ValgrindBuildAction.class);

@@ -1,5 +1,7 @@
 package org.jenkinsci.plugins.valgrind.util;
 
+import java.io.IOException;
+
 import org.jenkinsci.plugins.valgrind.ValgrindResult;
 
 public class ValgrindSummary
@@ -10,8 +12,10 @@ public class ValgrindSummary
 	 * @param result
 	 *            the valgrind result object
 	 * @return the HTML fragment representing the valgrind report summary
+	 * @throws InterruptedException
+	 * @throws IOException
 	 */
-	public static String createReportSummary(ValgrindResult result)
+	public static String createReportSummary(ValgrindResult result) throws IOException, InterruptedException
 	{
 
 		StringBuilder summary = new StringBuilder();

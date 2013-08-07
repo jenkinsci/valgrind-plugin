@@ -14,6 +14,7 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
+import hudson.FilePath;
 
 import java.io.IOException;
 
@@ -30,6 +31,7 @@ import org.jenkinsci.plugins.valgrind.util.ValgrindLogger;
 import org.jenkinsci.plugins.valgrind.util.ValgrindSourceGrabber;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
+
 
 /**
  * 
@@ -104,20 +106,38 @@ public class ValgrindPublisher extends Recorder
 			return false;
 		}
 		
+	
 		EnvVars env = build.getEnvironment();
-
-		ValgrindLogger.log(listener, "Analysing valgrind results");		
-
-		ValgrindParserResult parser = new ValgrindParserResult(listener, env.expand(valgrindPublisherConfig.getPattern()));
-		ValgrindReport valgrindReport;
-
-		valgrindReport = build.getWorkspace().act(parser);		
-		ValgrindResult valgrindResult = new ValgrindResult(build, valgrindReport);		
+		
+		FilePath baseFileFrom = build.getWorkspace();
+		FilePath baseFileTo =  new FilePath(build.getRootDir());
+		ValgrindResultsScanner scanner = new ValgrindResultsScanner(valgrindPublisherConfig.getPattern());
+		String[] files = baseFileFrom.act(scanner);
+		
+		ValgrindLogger.log(listener, "Files to copy:");
+		for (int i = 0; i < files.length; i++) {
+		    ValgrindLogger.log(listener, files[i]);
+		}
+		
+		for (int i = 0; i < files.length; i++) {
+		    FilePath fileFrom = new FilePath(baseFileFrom, files[i]);
+		    FilePath fileTo = new FilePath(baseFileTo, "valgrind-plugin/valgrind-results/" + files[i]);
+		    ValgrindLogger.log(listener, "Copying " + files[i] + " to " + fileTo.getRemote());
+		    fileFrom.copyTo(fileTo);		    
+		}
+		
+		
+		ValgrindLogger.log(listener, "Analysing valgrind results; configure Jenkins system log (ValgrindLogger) for details");
+		
+		ValgrindParserResult parser = new ValgrindParserResult("valgrind-plugin/valgrind-results/"+valgrindPublisherConfig.getPattern());
+		
+		ValgrindResult valgrindResult = new ValgrindResult(build, parser);
+		ValgrindReport valgrindReport = valgrindResult.getReport();
 		
 		new ValgrindEvaluator(valgrindPublisherConfig, listener).evaluate(valgrindReport, build, env); 
 		
-		ValgrindLogger.log(listener, "Analysing valgrind results");	
-		
+		ValgrindLogger.log(listener, "Analysing valgrind results");
+				
 		ValgrindSourceGrabber sourceGrabber = new ValgrindSourceGrabber(listener,  build.getModuleRoot());
 		
 		if ( !sourceGrabber.init( build.getRootDir() ) )
@@ -228,6 +248,7 @@ public class ValgrindPublisher extends Recorder
 		public ValgrindPublisherConfig getConfig()
 		{
 			return new ValgrindPublisherConfig();
-		}      
+		} 
+		
 	}
 }

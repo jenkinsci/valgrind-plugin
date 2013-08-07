@@ -78,7 +78,7 @@ public class ValgrindBuildAction extends AbstractValgrindBuildAction
 	}
 
 	@Override
-	public void doGraph(StaplerRequest req, StaplerResponse rsp) throws IOException
+	public void doGraph(StaplerRequest req, StaplerResponse rsp) throws IOException, InterruptedException
 	{
 		if (ChartUtil.awtProblemCause != null)
 		{
@@ -97,7 +97,12 @@ public class ValgrindBuildAction extends AbstractValgrindBuildAction
 		g.doPng(req, rsp);
 	}
 
-	private DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> getDataSetBuilder()
+	/**
+	 * @return a DataSetBuilder
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> getDataSetBuilder() throws IOException, InterruptedException
 	{
 		DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> dsb = new DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel>();
 

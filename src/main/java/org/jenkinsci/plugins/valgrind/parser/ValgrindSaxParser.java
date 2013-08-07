@@ -1,7 +1,5 @@
 package org.jenkinsci.plugins.valgrind.parser;
 
-import hudson.model.BuildListener;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -26,7 +24,6 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ValgrindSaxParser implements Serializable
 {
 	private static final long serialVersionUID = -6889121223670989851L;
-	private BuildListener listener;
 	
 	private class Handler extends DefaultHandler
 	{
@@ -143,7 +140,7 @@ public class ValgrindSaxParser implements Serializable
 				}
 				catch( IllegalArgumentException e )
 				{
-					ValgrindLogger.log(listener, "WARNING: Valgrind error not supported: " + data.toString());					
+					ValgrindLogger.logWarn("Valgrind error not supported: " + data.toString());
 				}				
 			}
 			
@@ -176,7 +173,7 @@ public class ValgrindSaxParser implements Serializable
 				}
 				catch( NumberFormatException e )
 				{
-					ValgrindLogger.log(listener, "WARNING: '" + data.toString() + "' is not a valid number of leaked bytes");
+					ValgrindLogger.logWarn("'" + data.toString() + "' is not a valid number of leaked bytes");
 				}
 			}
 			
@@ -188,7 +185,7 @@ public class ValgrindSaxParser implements Serializable
 				}
 				catch( NumberFormatException e )
 				{
-					ValgrindLogger.log(listener, "WARNING: '" + data.toString() + "' is not a valid number of leaked blocks");
+					ValgrindLogger.logWarn("'" + data.toString() + "' is not a valid number of leaked blocks");
 				}
 			}
 			
@@ -255,11 +252,6 @@ public class ValgrindSaxParser implements Serializable
 		{
 			return currentReport;
 		}
-	}
-	
-	public ValgrindSaxParser(BuildListener listener)
-	{
-		this.listener = listener;
 	}
 	
 	public ValgrindReport parse( final File file ) throws ParserConfigurationException, SAXException, IOException
