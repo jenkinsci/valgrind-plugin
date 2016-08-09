@@ -19,6 +19,7 @@
 <args>
   <vargv>
     <exe>/usr/bin/valgrind.bin</exe>
+    <arg>-v</arg>
     <arg>--suppressions=/usr/lib/valgrind/debian-libc6-dbg.supp</arg>
     <arg>--tool=memcheck</arg>
     <arg>--track-origins=no</arg>
