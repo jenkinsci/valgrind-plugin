@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.valgrind.util;
 
-import hudson.model.BuildListener;
+import hudson.model.TaskListener;
 
 import java.util.logging.Logger;
 
@@ -8,7 +8,7 @@ public abstract class ValgrindLogger
 {
     private static final Logger LOGGER = Logger.getLogger(ValgrindLogger.class.getSimpleName());
 
-    public static void log(BuildListener listener, final String message)
+    public static void log(TaskListener listener, final String message)
 	{
 		listener.getLogger().println("[Valgrind] " + message);
 	}

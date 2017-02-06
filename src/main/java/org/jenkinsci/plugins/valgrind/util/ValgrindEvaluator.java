@@ -2,8 +2,9 @@ package org.jenkinsci.plugins.valgrind.util;
 
 import hudson.EnvVars;
 import hudson.model.BuildListener;
+import hudson.model.TaskListener;
 import hudson.model.Result;
-import hudson.model.AbstractBuild;
+import hudson.model.Run;
 
 import org.jenkinsci.plugins.valgrind.config.ValgrindPublisherConfig;
 import org.jenkinsci.plugins.valgrind.model.ValgrindReport;
@@ -12,15 +13,15 @@ import org.jenkinsci.plugins.valgrind.model.ValgrindReport;
 public class ValgrindEvaluator
 {
 	private ValgrindPublisherConfig config;
-	private BuildListener listener;
+	private TaskListener listener;
 	
-	public ValgrindEvaluator( ValgrindPublisherConfig config, BuildListener listener )
+	public ValgrindEvaluator( ValgrindPublisherConfig config, TaskListener listener )
 	{
 		this.config = config;
 		this.listener = listener;
 	}
 	
-	public void evaluate( ValgrindReport report, AbstractBuild<?, ?> build, EnvVars env )
+	public void evaluate( ValgrindReport report, Run<?, ?> build, EnvVars env )
 	{		
 		build.setResult( evaluate(
 				report.getErrorList().getLeakDefinitelyLostErrorCount(), 

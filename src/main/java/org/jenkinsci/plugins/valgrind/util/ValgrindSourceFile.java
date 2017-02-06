@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.valgrind.util;
 
-import hudson.model.AbstractBuild;
+import hudson.model.Run;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,9 +39,9 @@ public class ValgrindSourceFile
 	private Map<String, String> sourceFileLookup;
 	private int linesBefore;
 	private int linesAfter;	
-	private AbstractBuild<?, ?> build;
+	private Run<?, ?> build;
 	
-	public ValgrindSourceFile( int linesBefore, int linesAfter, Map<String, String> sourceFileLookup, AbstractBuild<?, ?> build )
+	public ValgrindSourceFile( int linesBefore, int linesAfter, Map<String, String> sourceFileLookup, Run<?, ?> build )
 	{
 		this.sourceFileLookup = sourceFileLookup;
 		this.linesAfter = linesAfter;

@@ -3,13 +3,13 @@ package org.jenkinsci.plugins.valgrind;
 import org.jenkinsci.plugins.valgrind.util.AbstractValgrindProjectAction;
 
 import hudson.model.Result;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
+import hudson.model.Job;
+import hudson.model.Run;
 
 
 public class ValgrindProjectAction extends AbstractValgrindProjectAction
 {
-	protected ValgrindProjectAction(AbstractProject<?, ?> project)
+	protected ValgrindProjectAction(Job<?, ?> project)
 	{
 		super(project);
 	}
@@ -25,9 +25,9 @@ public class ValgrindProjectAction extends AbstractValgrindProjectAction
 	}
 
 	@Override
-	public AbstractBuild<?, ?> getLastFinishedBuild()
+	public Run<?, ?> getLastFinishedBuild()
 	{
-		AbstractBuild<?, ?> lastBuild = project.getLastBuild();
+		Run<?, ?> lastBuild = getJob().getLastBuild();
 		while (lastBuild != null
 				&& (lastBuild.isBuilding() || lastBuild.getAction(ValgrindBuildAction.class) == null))
 		{
@@ -39,7 +39,7 @@ public class ValgrindProjectAction extends AbstractValgrindProjectAction
 	@Override
 	public Integer getLastResultBuild()
 	{
-		for (AbstractBuild<?, ?> b = (AbstractBuild<?, ?>) project.getLastBuild(); b != null; b = b.getPreviousBuiltBuild())
+		for (Run<?, ?> b = (Run<?, ?>) getJob().getLastBuild(); b != null; b = b.getPreviousBuiltBuild())
 		{
 			ValgrindBuildAction r = b.getAction(ValgrindBuildAction.class);
 			
@@ -52,7 +52,7 @@ public class ValgrindProjectAction extends AbstractValgrindProjectAction
 	public final boolean isDisplayGraph()
 	{
 		// Latest
-		AbstractBuild<?, ?> b = getLastFinishedBuild();
+		Run<?, ?> b = getLastFinishedBuild();
 		if (b == null)
 			return false;
 
