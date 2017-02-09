@@ -1,7 +1,7 @@
 package org.jenkinsci.plugins.valgrind.util;
 
 import hudson.FilePath;
-import hudson.model.BuildListener;
+import hudson.model.TaskListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,13 +19,13 @@ import org.jenkinsci.plugins.valgrind.model.ValgrindStacktraceFrame;
  */
 public class ValgrindSourceGrabber
 {
-	private BuildListener listener;
+	private TaskListener listener;
 	private Map<String, String> lookup = new HashMap<String, String>();
 	private File destDirectory;
 	private FilePath basedir;
 	private int index = 0;
 	
-	public ValgrindSourceGrabber(BuildListener listener, FilePath basedir)
+	public ValgrindSourceGrabber(TaskListener listener, FilePath basedir)
 	{
 		this.listener = listener;
 		this.basedir = basedir;	

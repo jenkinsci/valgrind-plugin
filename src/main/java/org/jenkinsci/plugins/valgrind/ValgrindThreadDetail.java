@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.valgrind;
 
-import hudson.model.AbstractBuild;
+import hudson.model.Run;
 
 import org.jenkinsci.plugins.valgrind.model.ValgrindProcess;
 import org.jenkinsci.plugins.valgrind.model.ValgrindThread;
@@ -15,9 +15,9 @@ public class ValgrindThreadDetail
 {
 	private ValgrindThread thread;
 	private ValgrindProcess process;
-	final private AbstractBuild<?, ?> owner;
+	final private Run<?, ?> owner;
 	
-	public ValgrindThreadDetail( AbstractBuild<?, ?> owner, ValgrindProcess process, ValgrindThread thread, ValgrindSourceFile valgrindSourceFile )
+	public ValgrindThreadDetail( Run<?, ?> owner, ValgrindProcess process, ValgrindThread thread, ValgrindSourceFile valgrindSourceFile )
 	{
 		this.owner = owner;
 		this.thread = thread;	
@@ -37,7 +37,7 @@ public class ValgrindThreadDetail
 		return process;
 	}
 
-	public AbstractBuild<?, ?> getOwner()
+	public Run<?, ?> getOwner()
 	{
 		return owner;
 	}

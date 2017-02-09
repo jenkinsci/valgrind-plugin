@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.valgrind;
 
-import hudson.model.AbstractBuild;
+import hudson.model.Run;
 import hudson.FilePath;
 
 import java.io.IOException;
@@ -27,18 +27,18 @@ public class ValgrindResult implements Serializable
 
     private ValgrindParserResult parser;
     private ValgrindReport report;
-    private AbstractBuild<?, ?> owner;
+    private Run<?, ?> owner;
     private Map<String, String> sourceFiles;
      
 
-    public ValgrindResult( AbstractBuild<?, ?> build, ValgrindParserResult parser)
+    public ValgrindResult( Run<?, ?> build, ValgrindParserResult parser)
     {
     	this.owner = build;
         this.parser = parser;
         this.report = null; //for results serialized through this plugin version and later
     }
     
-	public AbstractBuild<?, ?> getOwner()
+	public Run<?, ?> getOwner()
 	{
 		return owner;
 	}

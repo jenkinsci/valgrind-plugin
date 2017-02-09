@@ -6,8 +6,9 @@ import hudson.Launcher;
 import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.Result;
-import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
@@ -31,13 +32,16 @@ import org.jenkinsci.plugins.valgrind.util.ValgrindSourceGrabber;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
+import jenkins.tasks.SimpleBuildStep;
+import javax.annotation.Nonnull;
+
 
 /**
  * 
  * @author Johannes Ohlemacher
  * 
  */
-public class ValgrindPublisher extends Recorder
+public class ValgrindPublisher extends Recorder implements SimpleBuildStep
 {
 	private ValgrindPublisherConfig valgrindPublisherConfig;
 
@@ -74,12 +78,6 @@ public class ValgrindPublisher extends Recorder
 		return DESCRIPTOR;
 	}
 
-	@Override
-	public Action getProjectAction(AbstractProject<?, ?> project)
-	{
-		return new ValgrindProjectAction(project);
-	}
-
 	public BuildStepMonitor getRequiredMonitorService()
 	{
 		return BuildStepMonitor.BUILD;
@@ -97,21 +95,21 @@ public class ValgrindPublisher extends Recorder
 	}
 
 	@Override
-	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
+	public void perform(@Nonnull Run<?, ?> build, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener listener)
 			throws InterruptedException, IOException
 	{
 		if (!canContinue(build.getResult()))
-			return true;
+			return;
 		
 		if ( valgrindPublisherConfig.getPattern() == null || valgrindPublisherConfig.getPattern().isEmpty() )
 		{
 			ValgrindLogger.log(listener, "ERROR: no pattern for valgrind xml files configured");
-			return false;
+			return;
 		}
 
 		EnvVars env = build.getEnvironment(listener);
 		
-		FilePath baseFileFrom = build.getWorkspace();
+		FilePath baseFileFrom = workspace;
 		FilePath baseFileTo =  new FilePath(build.getRootDir());
 		ValgrindResultsScanner scanner = new ValgrindResultsScanner(valgrindPublisherConfig.getPattern());
 		String[] files = baseFileFrom.act(scanner);
@@ -147,10 +145,10 @@ public class ValgrindPublisher extends Recorder
 			
 			ValgrindLogger.log(listener, "Analysing valgrind results");
 					
-			ValgrindSourceGrabber sourceGrabber = new ValgrindSourceGrabber(listener,  build.getModuleRoot());
+			ValgrindSourceGrabber sourceGrabber = new ValgrindSourceGrabber(listener,  workspace);
 			
 			if ( !sourceGrabber.init( build.getRootDir() ) )
-				return false;
+				return;
 			
 			if ( valgrindReport.getAllErrors() != null )
 			{
@@ -173,7 +171,7 @@ public class ValgrindPublisher extends Recorder
 			//remove workspace path from executable name
 			if ( valgrindReport.getProcesses() != null )
 			{
-				String workspacePath = build.getWorkspace().getRemote() + "/";
+				String workspacePath = workspace.getRemote() + "/";
 				ValgrindLogger.log(listener, "workspacePath: " + workspacePath);			
 				
 				
@@ -199,7 +197,7 @@ public class ValgrindPublisher extends Recorder
 			ValgrindLogger.log(listener, "Ending the valgrind analysis.");
 		}
 
-		return true;			
+		return;			
 		
 	}
 	
@@ -213,7 +211,7 @@ public class ValgrindPublisher extends Recorder
 		this.valgrindPublisherConfig = valgrindPublisherConfig;
 	}	
 	
-	private void logParserError(BuildListener listener, ValgrindReport report)
+	private void logParserError(TaskListener listener, ValgrindReport report)
 	{
 		if(report == null || report.getParserErrors() == null)
 			return;		
@@ -222,6 +220,61 @@ public class ValgrindPublisher extends Recorder
 		{
 			ValgrindLogger.log(listener, "ERROR: failed to parse " + entry.getKey() + ": " + entry.getValue());
 		}
+	}
+
+	public String getPattern()
+	{
+		return valgrindPublisherConfig.getPattern();
+	}
+
+	public String getFailThresholdInvalidReadWrite()
+	{
+		return valgrindPublisherConfig.getFailThresholdInvalidReadWrite();
+	}
+
+	public String getFailThresholdDefinitelyLost()
+	{
+		return valgrindPublisherConfig.getFailThresholdDefinitelyLost();
+	}
+
+	public String getFailThresholdTotal()
+	{
+		return valgrindPublisherConfig.getFailThresholdTotal();
+	}
+
+	public String getUnstableThresholdInvalidReadWrite()
+	{
+		return valgrindPublisherConfig.getUnstableThresholdInvalidReadWrite();
+	}
+
+	public String getUnstableThresholdDefinitelyLost()
+	{
+		return valgrindPublisherConfig.getUnstableThresholdDefinitelyLost();
+	}
+
+	public String getUnstableThresholdTotal()
+	{
+		return valgrindPublisherConfig.getUnstableThresholdTotal();
+	}
+
+	public boolean isPublishResultsForAbortedBuilds()
+	{
+		return valgrindPublisherConfig.isPublishResultsForAbortedBuilds();
+	}
+
+	public boolean isPublishResultsForFailedBuilds()
+	{
+		return valgrindPublisherConfig.isPublishResultsForFailedBuilds();
+	}
+	
+	public boolean isFailBuildOnMissingReports()
+	{
+		return valgrindPublisherConfig.isFailBuildOnMissingReports();
+	}
+	
+	public boolean isFailBuildOnInvalidReports()
+	{
+		return valgrindPublisherConfig.isFailBuildOnInvalidReports();
 	}
 	
 	@Extension
@@ -276,4 +329,5 @@ public class ValgrindPublisher extends Recorder
 		} 
 		
 	}
+
 }

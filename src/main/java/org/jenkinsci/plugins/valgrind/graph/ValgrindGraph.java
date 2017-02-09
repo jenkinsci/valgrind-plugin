@@ -16,10 +16,10 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 
-import hudson.model.AbstractBuild;
 import hudson.util.ColorPalette;
 import hudson.util.Graph;
 import hudson.util.ShiftedCategoryAxis;
+import hudson.model.Run;
 
 public class ValgrindGraph extends Graph
 {
@@ -30,7 +30,7 @@ public class ValgrindGraph extends Graph
 	public static final int DEFAULT_CHART_WIDTH = 500;
 	public static final int DEFAULT_CHART_HEIGHT = 250;
 
-	public ValgrindGraph(AbstractBuild<?, ?> owner, CategoryDataset categoryDataset, String yLabel,
+	public ValgrindGraph(Run<?, ?> owner, CategoryDataset categoryDataset, String yLabel,
 			int chartWidth, int chartHeight)
 	{
 		super(owner.getTimestamp(), chartWidth, chartHeight);

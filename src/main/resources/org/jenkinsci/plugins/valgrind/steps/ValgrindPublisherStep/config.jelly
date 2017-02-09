@@ -1,0 +1,80 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+         xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:u="/util">
+
+    <f:entry title="Report Pattern:" 
+        description="Pattern to find your valgrind xml reports.">
+        
+        <f:textbox name="valgrind.pattern" value="${instance.pattern}"/>
+    </f:entry>
+    
+	  <f:entry title="Fail build on missing reports" description="Mark build as failed if no report was found.">
+		<f:checkbox name="valgrind.failBuildOnMissingReports" checked="${instance.failBuildOnMissingReports}"/>
+	  </f:entry>     
+	  
+	  <f:entry title="Fail build on invalid reports" description="Mark build as failed on malformed xml reports.">
+		<f:checkbox name="valgrind.failBuildOnInvalidReports" checked="${instance.failBuildOnInvalidReports}"/>
+	  </f:entry>	  
+    
+	  <f:entry title="Publish results for aborted builds">
+		<f:checkbox name="valgrind.publishResultsForAbortedBuilds" checked="${instance.publishResultsForAbortedBuilds}"/>
+	  </f:entry>    
+   
+	  <f:entry title="Publish results for failed builds">
+		<f:checkbox name="valgrind.publishResultsForFailedBuilds" checked="${instance.publishResultsForFailedBuilds}"/>
+	  </f:entry>      
+    
+	  <f:entry title="Build Status Thresholds"
+	    description="Mark build as failed or unstable if number of errors exceeds a threshold.">
+	    <table>
+	      <thead>
+	        <tr>
+	          <td></td>
+	          <td width="80">
+	            <img src="${rootURL}/images/16x16/red.gif" alt="0%" title="FAILED" />
+	          </td>
+	          <td width="80">
+	            <img src="${rootURL}/images/16x16/yellow.gif" alt="100%" title="UNSTABLE" />
+	          </td>
+	        </tr>
+	      </thead>
+	      
+	      <tbody>
+	        <tr>
+	          <td style="vertical-align:middle">Invalid Reads/Writes</td>
+	          <td>
+	            <f:textbox name="valgrind.failThresholdInvalidReadWrite" value="${instance.failThresholdInvalidReadWrite}" />
+	          </td>
+	          <td>
+	            <f:textbox name="valgrind.unstableThresholdInvalidReadWrite" value="${instance.unstableThresholdInvalidReadWrite}" />
+	          </td>
+	        </tr>	        
+	      </tbody>
+	      
+	      <tbody>
+	        <tr>
+	          <td style="vertical-align:middle">Leak (definitely lost)</td>
+	          <td>
+	            <f:textbox name="valgrind.failThresholdDefinitelyLost" value="${instance.failThresholdDefinitelyLost}" />
+	          </td>
+	          <td>
+	            <f:textbox name="valgrind.unstableThresholdDefinitelyLost" value="${instance.unstableThresholdDefinitelyLost}" />
+	          </td>
+	        </tr>	        
+	      </tbody>
+	      
+	      	      	      <tbody>
+	        <tr>
+	          <td style="vertical-align:middle">Total</td>
+	          <td>
+	            <f:textbox name="valgrind.failThresholdTotal" value="${instance.failThresholdTotal}" />
+	          </td>
+	          <td>
+	            <f:textbox name="valgrind.unstableThresholdTotal" value="${instance.unstableThresholdTotal}" />
+	          </td>
+	        </tr>	        
+	      </tbody>
+	    </table>
+	  </f:entry>
+	  
+</j:jelly>

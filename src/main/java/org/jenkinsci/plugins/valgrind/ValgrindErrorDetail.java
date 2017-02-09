@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.valgrind;
 
-import hudson.model.AbstractBuild;
+import hudson.model.Run;
 
 import org.jenkinsci.plugins.valgrind.model.ValgrindError;
 import org.jenkinsci.plugins.valgrind.model.ValgrindProcess;
@@ -15,9 +15,9 @@ public class ValgrindErrorDetail
 {
 	private ValgrindError error;
 	private ValgrindProcess process;
-	final private AbstractBuild<?, ?> owner;
+	final private Run<?, ?> owner;
 	
-	public ValgrindErrorDetail( AbstractBuild<?, ?> owner, ValgrindProcess process, ValgrindError error, ValgrindSourceFile valgrindSourceFile )
+	public ValgrindErrorDetail( Run<?, ?> owner, ValgrindProcess process, ValgrindError error, ValgrindSourceFile valgrindSourceFile )
 	{
 		this.owner = owner;
 		this.error = error;	
@@ -37,7 +37,7 @@ public class ValgrindErrorDetail
 		return process;
 	}
 
-	public AbstractBuild<?, ?> getOwner()
+	public Run<?, ?> getOwner()
 	{
 		return owner;
 	}

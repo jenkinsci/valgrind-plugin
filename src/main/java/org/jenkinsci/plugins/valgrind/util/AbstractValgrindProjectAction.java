@@ -6,23 +6,23 @@ import org.jenkinsci.plugins.valgrind.ValgrindBuildAction;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 import hudson.model.Actionable;
 import hudson.model.ProminentProjectAction;
+import hudson.model.Job;
+import hudson.model.Run;
 
 public abstract class AbstractValgrindProjectAction extends Actionable implements ProminentProjectAction
 {
-	protected final AbstractProject<?, ?> project;
+	protected final Job<?, ?> job;
 	
-	protected AbstractValgrindProjectAction(AbstractProject<?, ?> project)
+	protected AbstractValgrindProjectAction(Job<?, ?> job)
 	{
-		this.project = project;
+		this.job = job;
 	}
 	
-	public AbstractProject<?, ?> getProject()
+	public Job<?, ?> getJob()
 	{
-		return project;
+		return job;
 	}
 
 	public String getIconFileName()
@@ -35,13 +35,13 @@ public abstract class AbstractValgrindProjectAction extends Actionable implement
 		return getUrlName();
 	}
 
-    protected abstract AbstractBuild<?, ?> getLastFinishedBuild();
+    protected abstract Run<?, ?> getLastFinishedBuild();
 
     protected abstract Integer getLastResultBuild();
 
 	public void doGraph(StaplerRequest req, StaplerResponse rsp) throws IOException, InterruptedException
 	{
-		AbstractBuild<?, ?> lastBuild = getLastFinishedBuild();
+		Run<?, ?> lastBuild = getLastFinishedBuild();
 		ValgrindBuildAction valgrindBuildAction = lastBuild.getAction(ValgrindBuildAction.class);
 		if (valgrindBuildAction != null)
 		{
