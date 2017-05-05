@@ -102,11 +102,21 @@ public class ValgrindSourceGrabber
 			}
             
             FileOutputStream outputStream = new FileOutputStream(masterFile);
-            
-            file.copyTo(outputStream);            
+            try
+            {
+                    file.copyTo(outputStream);
+            }
+            finally
+            {
+                    outputStream.close();
+            }
             
 			return fileName;			
 		}
+                catch (RuntimeException e)
+                {
+                        throw e;
+                }
 		catch (Exception e)
 		{
 			ValgrindLogger.log(listener, "ERROR: failed to retrieve '" + file.getRemote() + "', " + e.getMessage() );

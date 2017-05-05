@@ -27,17 +27,16 @@ public abstract class ValgrindUtil
 	
 	public static String join( List<FilePath> files, String sep )
 	{
-		String s = "";
-		
+                StringBuffer buf = new StringBuffer();
 		for( int i = 0; i <  files.size(); ++i )
 		{
-			s +=  files.get( i ).getName();
+			buf.append(files.get( i ).getName());
 			
 			if ( i + 1 <  files.size() )
-				s += sep;
+				buf.append(sep);
 		}
 		
-		return s;
+		return buf.toString();
 	}	
 }
 

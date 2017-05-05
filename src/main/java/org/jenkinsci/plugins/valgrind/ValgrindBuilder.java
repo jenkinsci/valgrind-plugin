@@ -119,7 +119,7 @@ public class ValgrindBuilder extends Builder
 				deleteOldReports(build, listener);
 			
 			ValgrindExecutable valgrindExecutable = new ValgrindExecutable(launcher,
-					build.getEnvironment(null).expand(this.valgrindExecutable));
+					build.getEnvironment(listener).expand(this.valgrindExecutable));
 
 			ValgrindLogger.log( listener, "detected valgrind version ("
 					+ valgrindExecutable.getExecutable() + "): "
@@ -131,6 +131,10 @@ public class ValgrindBuilder extends Builder
 					return false;
 			}
 		}
+                catch (RuntimeException e)
+                {
+                        throw e;
+                }
 		catch (Exception e)
 		{
 			ValgrindLogger.log(listener, "ERROR, " + e.getClass().getCanonicalName() + ": " + e.getMessage());
@@ -297,9 +301,17 @@ public class ValgrindBuilder extends Builder
 			{
 				ValgrindLogger.log(listener, "WARNING: valgrind version does not support writing xml output to file directly " +
 						"(requires version 3.5.0 or later), xml output will be captured from error out");
-				OutputStream os = xmlFile.write();
-				PrintStream out = new PrintStream(os);
-				out.print(stderr.toString());
+                                OutputStream os = xmlFile.write();
+                                PrintStream out = new PrintStream(os, true, "UTF-8");
+                                try
+                                {
+                                        out.print(stderr.toString("UTF-8"));
+                                }
+                                finally
+                                {
+                                        out.close();
+                                        os.close();
+                                }
 			}
 
 			if (exitCode != 0 && !ignoreExitCode)
@@ -307,8 +319,8 @@ public class ValgrindBuilder extends Builder
 		}
 		finally
 		{
-			String stdoutString = stdout.toString().trim();
-			String stderrString = stderr.toString().trim();
+			String stdoutString = stdout.toString("UTF-8").trim();
+			String stderrString = stderr.toString("UTF-8").trim();
 
 			if ( !stdoutString.isEmpty() )
 				ValgrindLogger.log(listener, "valgrind standard out: \n" + stdoutString);

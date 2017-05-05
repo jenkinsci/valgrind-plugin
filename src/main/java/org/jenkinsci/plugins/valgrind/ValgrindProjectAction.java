@@ -57,24 +57,20 @@ public class ValgrindProjectAction extends AbstractValgrindProjectAction
 			return false;
 
 		// Affect previous
-		b = b.getPreviousBuild();
-		if (b != null)
+		for (b = b.getPreviousBuild(); b != null; b = b.getPreviousBuild())
 		{
-			for (; b != null; b = b.getPreviousBuild())
-			{
-				if (b.getResult().isWorseOrEqualTo(Result.FAILURE))
-					continue;
+			if (b.getResult().isWorseOrEqualTo(Result.FAILURE))
+				continue;
 
-				ValgrindBuildAction action = b.getAction(ValgrindBuildAction.class);
-				if (action == null || action.getResult() == null)
-					continue;
+			ValgrindBuildAction action = b.getAction(ValgrindBuildAction.class);
+			if (action == null || action.getResult() == null)
+				continue;
 
-				ValgrindResult result = action.getResult();
-				if (result == null)
-					continue;
+			ValgrindResult result = action.getResult();
+			if (result == null)
+				continue;
 
-				return true;
-			}
+			return true;
 		}
 
 		return false;

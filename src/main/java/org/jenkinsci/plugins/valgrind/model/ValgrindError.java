@@ -37,10 +37,14 @@ public class ValgrindError implements Serializable
 
 	public String toString()
 	{
-		return 
-		"kind: " + kind + "\n" +
-		"text: " + description + "\n" +
-		"stack: " + stacktrace.toString();
+                if (kind != null && description != null && stacktrace != null)
+                {
+                        return "kind: " + kind + "\n" +
+                               "text: " + description + "\n" +
+                               "stack: " + stacktrace.toString();
+                }
+                else
+                        return "";
 	}	
 	
 	public void setSourceCode( ValgrindSourceFile sourceFile )

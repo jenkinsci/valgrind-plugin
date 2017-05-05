@@ -110,10 +110,7 @@ public class ValgrindReport implements Serializable
 		
 		ValgrindProcess process = findProcess(pid);
 		
-		if ( process != null )
-			return process.findErrorByUniqueId( uniqueId );
-
-		return null;
+		return process.findErrorByUniqueId( uniqueId );
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -203,9 +200,6 @@ public class ValgrindReport implements Serializable
 	{
 		ValgrindProcess process = findProcess(pid);
 		
-		if ( process != null )
-			return process.findThreadByHthreadid(hthreadid);
-
-		return null;
+		return process.findThreadByHthreadid(hthreadid);
 	}	
 }

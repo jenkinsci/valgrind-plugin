@@ -44,7 +44,11 @@ public class ValgrindParserResult implements FilePath.FileCallable<ValgrindRepor
 				{
 					valgrindReport.addParserError(fileName, "no valid data");					
 				}
-			} 
+			}
+                        catch (RuntimeException e)
+                        {
+                                throw e;
+                        }
 			catch (Exception e)
 			{
 				valgrindReport.addParserError(fileName, e.getMessage());
