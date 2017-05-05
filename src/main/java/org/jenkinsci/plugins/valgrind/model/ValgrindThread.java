@@ -14,10 +14,16 @@ public class ValgrindThread implements Serializable
 
 	public String toString()
 	{
-		return 
-		"id: " + hthreadid + "\n" +
-		"root_thread: " + rootThread + "\n" +
-		"stack: " + stacktrace.toString();
+                if (hthreadid != null && stacktrace != null)
+                {
+                        return "id: " + hthreadid + "\n" +
+                                "root_thread: " + rootThread + "\n" +
+                                "stack: " + stacktrace.toString();
+                }
+                else
+                {
+                        return "";
+                }
 	}	
 	
 	public void setSourceCode( ValgrindSourceFile sourceFile )

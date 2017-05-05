@@ -35,20 +35,22 @@ public class ValgrindStacktrace implements Serializable
 	
 	public String toString()
 	{		
-		String s = "";
-		
 		if ( frames == null )
 			return "";
 		
+                StringBuffer buf = new StringBuffer();
 		for( ValgrindStacktraceFrame frame : frames )
 		{
-			s += frame.toString() + "\n\n";			
+			buf.append(frame.toString() + "\n\n");
 		}
-		return s;
+		return buf.toString();
 	}
 	
 	public String getFileSummary()
 	{
+                if ( frames == null )
+			throw new IllegalStateException("valgrind stacktrace is empty");
+
 		List<String> files = new ArrayList<String>();
 		
 		for( ValgrindStacktraceFrame frame : frames )
@@ -80,7 +82,7 @@ public class ValgrindStacktrace implements Serializable
 	
 	public ValgrindStacktraceFrame getFrame( int index )
 	{
-		if ( isEmpty() )
+		if ( isEmpty() || frames == null )
 			throw new IllegalStateException("valgrind stacktrace is empty");
 		
 		return frames.get( index );

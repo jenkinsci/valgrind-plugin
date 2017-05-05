@@ -26,7 +26,6 @@ public class ValgrindResult implements Serializable
 	private static final String PID_TOKEN = "pid=";
 
     private ValgrindParserResult parser;
-    private ValgrindReport report;
     private AbstractBuild<?, ?> owner;
     private Map<String, String> sourceFiles;
      
@@ -35,7 +34,6 @@ public class ValgrindResult implements Serializable
     {
     	this.owner = build;
         this.parser = parser;
-        this.report = null; //for results serialized through this plugin version and later
     }
     
 	public AbstractBuild<?, ?> getOwner()
@@ -59,8 +57,6 @@ public class ValgrindResult implements Serializable
 	 */
 	public ValgrindReport getReport() throws IOException, InterruptedException
 	{
-	    if(report != null) 
-	        return report; //for results serialized through older plugin version(s)
 
         FilePath file = new FilePath(owner.getRootDir());
         return file.act(parser);

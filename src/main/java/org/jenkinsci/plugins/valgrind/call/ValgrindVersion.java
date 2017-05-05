@@ -67,6 +67,6 @@ public class ValgrindVersion
 		if (!m.find())
 			return null;
 
-		return createInstance(Integer.valueOf(m.group(1)), Integer.valueOf(m.group(2)), Integer.valueOf(m.group(3)));
+		return createInstance(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
 	}
 }

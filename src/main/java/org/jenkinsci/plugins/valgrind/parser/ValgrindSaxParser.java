@@ -27,7 +27,7 @@ public class ValgrindSaxParser implements Serializable
 {
 	private static final long serialVersionUID = -6889121223670989851L;
 	
-	private class Handler extends DefaultHandler
+	private static class Handler extends DefaultHandler
 	{
 		private ValgrindReport currentReport;
 		private ValgrindProcess currentProcess;

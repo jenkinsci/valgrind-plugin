@@ -40,15 +40,15 @@ public class ValgrindExecutable
 		if (ret != 0)
 		{
 			throw new IllegalArgumentException("Failed to detect version of valgrind " + executable + " (return code "
-					+ ret + "): " + os.toString());
+					+ ret + "): " + os.toString("UTF-8"));
 		}
 
-		ValgrindVersion version = ValgrindVersion.createInstanceFromString(os.toString());
+		ValgrindVersion version = ValgrindVersion.createInstanceFromString(os.toString("UTF-8"));
 
 		if (version == null)
 		{
 			throw new IllegalArgumentException("Failed to detect version of valgrind " + executable + ", '"
-					+ os.toString() + "' is not a valid version string");
+					+ os.toString("UTF-8") + "' is not a valid version string");
 		}
 
 		return version;

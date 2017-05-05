@@ -20,8 +20,8 @@ public class ValgrindProcess implements Serializable
 	private List<ValgrindError> errors;
 	private List<ValgrindThread> threads;
 	
-	private transient ValgrindProcess parent;
-	private transient List<ValgrindProcess> childs;
+	private transient ValgrindProcess parent = null;
+	private transient List<ValgrindProcess> childs = null;
 	
 	public boolean isValid()
 	{
@@ -201,13 +201,13 @@ public class ValgrindProcess implements Serializable
 	{
 		if ( args == null )
 			return "";
-		
-		String s = "";
+
+                StringBuffer buf = new StringBuffer();
 		for ( String a : args )
 		{
-			s += a + "<br>";
+			buf.append(a + "<br>");
 		}
-		return s.trim();
+		return buf.toString().trim();
 	}
 	
 	public String getArgumentsString()
