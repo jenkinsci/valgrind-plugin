@@ -117,6 +117,10 @@ public class ValgrindCall
 		for (String option : customValgindOptions)
 			cmds.add(env.expand(option));
 
+		if (!System.getProperty("os.name").startsWith("Windows")) {
+			programName = "." + programName;
+		}
+		
 		cmds.add(programName);
 
 		for (String argument : programArguments)
