@@ -26,7 +26,7 @@ public class ValgrindResult implements Serializable
 	private static final String PID_TOKEN = "pid=";
 
     private ValgrindParserResult parser;
-    private transient Run<?, ?> owner;
+    private Run<?, ?> owner;
     private Map<String, String> sourceFiles;
 
     public ValgrindResult( Run<?, ?> build, ValgrindParserResult parser)
