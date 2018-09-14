@@ -122,6 +122,13 @@ public class ValgrindBuildAction extends AbstractValgrindBuildAction implements 
 		{
 			final Run<?,?> run = buildAction.owner;
 			final ChartUtil.NumberOnlyBuildLabel label = new ChartUtil.NumberOnlyBuildLabel(run);
+			
+			if (buildAction.getResult().getOwner() == null)
+			{
+			    // Result owner is null. Propagate our owner to the result.
+			    buildAction.getResult().setOwner(run);
+			}
+			
 			final ValgrindReport report = buildAction.getResult().getReport();
 
 			// Memcheck:
