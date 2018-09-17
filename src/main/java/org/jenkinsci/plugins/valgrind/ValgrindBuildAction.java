@@ -148,4 +148,11 @@ public class ValgrindBuildAction extends AbstractValgrindBuildAction implements 
  		projectActions.add(new ValgrindProjectAction(owner.getParent()));
 		return projectActions;
 	}
+
+    @Override
+    public void setOwner(Run<?, ?> owner) {
+        super.setOwner(owner);
+
+        result.setOwner(owner);
+    }
 }

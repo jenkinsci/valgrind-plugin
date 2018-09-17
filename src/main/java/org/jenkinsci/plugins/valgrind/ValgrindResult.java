@@ -40,6 +40,10 @@ public class ValgrindResult implements Serializable
 		return owner;
 	}
 
+    public void setOwner(Run<?,?> owner) {
+        this.owner = owner;
+    }
+
 	public ValgrindPublisherConfig getConfig()
 	{
 		ValgrindBuildAction action = owner.getAction(ValgrindBuildAction.class);
