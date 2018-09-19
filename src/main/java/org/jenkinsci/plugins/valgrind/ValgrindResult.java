@@ -136,4 +136,9 @@ public class ValgrindResult implements Serializable
 		}
 	}
 
+    public void setOwner(Run<?, ?> owner)
+    {
+        this.owner = owner;
+    }
+
 }
