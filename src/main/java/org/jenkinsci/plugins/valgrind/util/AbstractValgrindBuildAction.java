@@ -2,7 +2,7 @@ package org.jenkinsci.plugins.valgrind.util;
 
 import java.io.IOException;
 
-import hudson.model.Action;
+import jenkins.model.RunAction2;
 import hudson.model.Actionable;
 import hudson.model.HealthReportingAction;
 import hudson.model.Result;
@@ -13,9 +13,9 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
 
-public abstract class AbstractValgrindBuildAction extends Actionable implements Action, HealthReportingAction, StaplerProxy
+public abstract class AbstractValgrindBuildAction extends Actionable implements RunAction2, HealthReportingAction, StaplerProxy
 {
-    protected Run<?, ?> owner;
+    protected transient Run<?, ?> owner;
 
     protected AbstractValgrindBuildAction(Run<?, ?> owner) {
         this.owner = owner;
@@ -38,6 +38,18 @@ public abstract class AbstractValgrindBuildAction extends Actionable implements 
 
     public Run<?, ?> getOwner() {
         return owner;
+    }
+    
+    public void setOwner(Run<?, ?> owner) {
+        this.owner = owner;
+    }
+
+    public void onAttached(Run<?,?> r) {
+        setOwner(r);
+    }
+
+    public void onLoad(Run<?,?> r) {
+        setOwner(r);
     }
 
     public abstract void doGraph(StaplerRequest req, StaplerResponse rsp) throws IOException, InterruptedException;
