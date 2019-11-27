@@ -82,7 +82,7 @@ public class ValgrindPublisher extends Recorder implements SimpleBuildStep
 	@Override
 	public BuildStepMonitor getRequiredMonitorService()
 	{
-		return BuildStepMonitor.BUILD;
+		return BuildStepMonitor.NONE;
 	}
 
 	protected boolean canContinue(final Result result)
