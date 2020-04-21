@@ -157,7 +157,7 @@ public class ValgrindSaxParser implements Serializable
 			}
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/announcethread/hthreadid") && currentThread != null )
-				currentThread.setHthreadid( data.toString() );
+				currentThread.setHthreadid(hudson.Util.escape(data.toString()));
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/announcethread/stack") && currentThread != null )
 			{
@@ -182,28 +182,28 @@ public class ValgrindSaxParser implements Serializable
 			}	
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/error/unique") )
-				currentError.setUniqueId( data.toString() );
+				currentError.setUniqueId(hudson.Util.escape(data.toString()));
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/pid") && currentProcess != null )
-				currentProcess.setPid(data.toString());
+				currentProcess.setPid(hudson.Util.escape(data.toString()));
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/ppid") && currentProcess != null )
-				currentProcess.setPpid(data.toString());				
+				currentProcess.setPpid(hudson.Util.escape(data.toString()));
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/error/kind") )
 			{
 				try
 				{
-					currentError.setKind( ValgrindErrorKind.valueOf( data.toString() ) );					
+					currentError.setKind( ValgrindErrorKind.valueOf(hudson.Util.escape(data.toString())) );
 				}
 				catch( IllegalArgumentException e )
 				{
-					ValgrindLogger.logWarn("Valgrind error not supported: " + data.toString());
+					ValgrindLogger.logWarn("Valgrind error not supported: " + hudson.Util.escape(data.toString()));
 				}				
 			}
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/error/what") )
-				currentError.setDescription( data.toString() );
+				currentError.setDescription(hudson.Util.escape(data.toString()));
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/error/auxwhat") && currentError != null )
 			{
@@ -211,12 +211,12 @@ public class ValgrindSaxParser implements Serializable
 					currentError.addAuxiliaryData(currentAuxiliary);
 				
 				currentAuxiliary = new ValgrindAuxiliary();
-				currentAuxiliary.setDescription( data.toString() );
+				currentAuxiliary.setDescription(hudson.Util.escape(data.toString()));
 			}
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/error/xauxwhat/text"))
 			{
-				currentText = data.toString();
+				currentText = hudson.Util.escape(data.toString());
 			}
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/error/xauxwhat"))
@@ -229,16 +229,16 @@ public class ValgrindSaxParser implements Serializable
 			}
 
 			if ( path.equalsIgnoreCase("/valgrindoutput/args/argv/exe") && currentProcess != null )
-				currentProcess.setExecutable(data.toString());
+				currentProcess.setExecutable(hudson.Util.escape(data.toString()));
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/args/argv/arg") && currentProcess != null )
-				currentProcess.addArgument(data.toString());			
+				currentProcess.addArgument(hudson.Util.escape(data.toString()));
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/args/vargv/arg") && currentProcess != null )
-				currentProcess.addValgrindArgument(data.toString());
+				currentProcess.addValgrindArgument(hudson.Util.escape(data.toString()));
 
 			if ( path.equalsIgnoreCase("/valgrindoutput/error/xwhat/text") )
-				currentError.setDescription( data.toString() );				
+				currentError.setDescription(hudson.Util.escape(data.toString()));
 			
 			if ( path.equalsIgnoreCase("/valgrindoutput/error/xwhat/leakedbytes") )
 			{
@@ -248,7 +248,7 @@ public class ValgrindSaxParser implements Serializable
 				}
 				catch( NumberFormatException e )
 				{
-					ValgrindLogger.logWarn("'" + data.toString() + "' is not a valid number of leaked bytes");
+					ValgrindLogger.logWarn("'" + hudson.Util.escape(data.toString()) + "' is not a valid number of leaked bytes");
 				}
 			}
 			
@@ -260,7 +260,7 @@ public class ValgrindSaxParser implements Serializable
 				}
 				catch( NumberFormatException e )
 				{
-					ValgrindLogger.logWarn("'" + data.toString() + "' is not a valid number of leaked blocks");
+					ValgrindLogger.logWarn("'" + hudson.Util.escape(data.toString()) + "' is not a valid number of leaked blocks");
 				}
 			}
 			
@@ -289,19 +289,19 @@ public class ValgrindSaxParser implements Serializable
 				
 				if ( path.equalsIgnoreCase("/valgrindoutput/error/stack/frame/obj") ||
 						path.equalsIgnoreCase("/valgrindoutput/announcethread/stack/frame/obj"))
-					currentStacktraceFrame.setObjectName( data.toString() );
+					currentStacktraceFrame.setObjectName(hudson.Util.escape(data.toString()));
 				
 				if ( path.equalsIgnoreCase("/valgrindoutput/error/stack/frame/fn") ||
 						path.equalsIgnoreCase("/valgrindoutput/announcethread/stack/frame/fn"))
-					currentStacktraceFrame.setFunctionName( data.toString() );
+					currentStacktraceFrame.setFunctionName(hudson.Util.escape(data.toString()));
 				
 				if ( path.equalsIgnoreCase("/valgrindoutput/error/stack/frame/dir") ||
 						path.equalsIgnoreCase("/valgrindoutput/announcethread/stack/frame/dir"))
-					currentStacktraceFrame.setDirectoryName( data.toString() );
+					currentStacktraceFrame.setDirectoryName(hudson.Util.escape(data.toString()));
 				
 				if ( path.equalsIgnoreCase("/valgrindoutput/error/stack/frame/file") ||
 						path.equalsIgnoreCase("/valgrindoutput/announcethread/stack/frame/file"))
-					currentStacktraceFrame.setFileName( data.toString() );
+					currentStacktraceFrame.setFileName(hudson.Util.escape(data.toString()));
 				
 				if ( path.equalsIgnoreCase("/valgrindoutput/error/stack/frame/line") ||
 						path.equalsIgnoreCase("/valgrindoutput/announcethread/stack/frame/line"))
@@ -317,7 +317,7 @@ public class ValgrindSaxParser implements Serializable
 			}
 
 			if ( path.equalsIgnoreCase("/valgrindoutput/error/suppression/rawtext") && currentError != null && data != null)
-				currentError.setSuppression(data.toString().trim());
+				currentError.setSuppression(hudson.Util.escape(data.toString().trim()));
 			
 			data = null;
 			path = path.substring(0, path.length() - ( qName.length() + 1 ) );
