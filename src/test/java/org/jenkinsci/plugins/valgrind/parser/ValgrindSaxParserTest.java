@@ -173,14 +173,14 @@ public class ValgrindSaxParserTest
 		ValgrindError error = report.findError("10418", "0x2");
 		assertNotNull(error);
 
-		final String expectedSuppression =
+		final String expectedSuppression = hudson.Util.escape(
         "{\n" +
 		"   <insert_a_suppression_name_here>\n" +
 		"   Memcheck:Addr1\n" +
 		"   fun:memcpy@@GLIBC_2.14\n" +
 		"   fun:access_already_freed_memory_memcpy\n" +
 		"   fun:main\n" +
-		"}";
+		"}");
 
 		assertEquals(expectedSuppression, error.getSuppression());
 	}
