@@ -24,6 +24,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
+import hudson.AbortException;
 import hudson.DescriptorExtensionList;
 import hudson.EnvVars;
 import hudson.Extension;
@@ -143,11 +144,11 @@ public class ValgrindBuilder extends Builder implements SimpleBuildStep
 			{
 				if (!callValgrindOnExecutable(workspace, env, listener, launcher, valgrindExecutable, executable))
 				{
-					return;
+					throw new AbortException("Valgrind checks failed");
 				}
 			}
 		}
-                catch (RuntimeException e)
+                catch (RuntimeException|AbortException e)
                 {
                         throw e;
                 }
